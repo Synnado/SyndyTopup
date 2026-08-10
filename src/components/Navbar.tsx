@@ -5,6 +5,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Search, Moon, Sun, User, Coins, Menu, X } from "lucide-react";
 import { useTheme } from "@/context/ThemeContext";
+import SearchModal from "@/components/SearchModal";
 
 // เมนูหลักของ navbar — แก้ path/ชื่อได้ตรงนี้ที่เดียว
 const NAV_LINKS = [
@@ -16,6 +17,7 @@ const NAV_LINKS = [
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   // TODO: ค่ายอดเงินตอนนี้เป็นค่าตายตัวไปก่อน รอบต่อไปจะต่อกับระบบ Wallet จริง
   const coinBalance = 0;
@@ -52,16 +54,15 @@ export default function Navbar() {
           ))}
         </div>
 
-        {/* ช่องค้นหา — โชว์เฉพาะจอ md ขึ้นไป */}
+        {/* ช่องค้นหา — โชว์เฉพาะจอ md ขึ้นไป — กดแล้วเปิด SearchModal */}
         <div className="hidden max-w-xs flex-1 md:flex">
-          <div className="flex w-full items-center gap-2 rounded-full border-2 border-accent bg-surface px-4 py-2">
+          <button
+            onClick={() => setIsSearchOpen(true)}
+            className="flex w-full items-center gap-2 rounded-full border-2 border-accent bg-surface px-4 py-2 text-left"
+          >
             <Search size={16} className="shrink-0 text-muted" />
-            <input
-              type="text"
-              placeholder="ค้นหาสินค้า"
-              className="w-full bg-transparent text-sm text-foreground placeholder:text-muted focus:outline-none"
-            />
-          </div>
+            <span className="text-sm text-muted">ค้นหาสินค้า</span>
+          </button>
         </div>
 
         {/* ฝั่งขวา: dark mode, ยอดเงิน, โปรไฟล์ */}
@@ -117,16 +118,20 @@ export default function Navbar() {
               {link.label}
             </Link>
           ))}
-          <div className="mt-1 flex items-center gap-2 rounded-full border-2 border-accent bg-surface px-4 py-2">
+          <button
+            onClick={() => {
+              setIsMobileMenuOpen(false);
+              setIsSearchOpen(true);
+            }}
+            className="mt-1 flex items-center gap-2 rounded-full border-2 border-accent bg-surface px-4 py-2 text-left"
+          >
             <Search size={16} className="shrink-0 text-muted" />
-            <input
-              type="text"
-              placeholder="ค้นหาสินค้า"
-              className="w-full bg-transparent text-sm text-foreground placeholder:text-muted focus:outline-none"
-            />
-          </div>
+            <span className="text-sm text-muted">ค้นหาสินค้า</span>
+          </button>
         </div>
       )}
+
+      <SearchModal open={isSearchOpen} onClose={() => setIsSearchOpen(false)} />
     </nav>
   );
 }
