@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import SplashScreen from "@/components/SplashScreen";
+import Navbar from "@/components/Navbar";
+import { ThemeProvider } from "@/context/ThemeContext";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -25,7 +27,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <SplashScreen duration={2500}>{children}</SplashScreen>
+        <ThemeProvider>
+          <SplashScreen duration={2500}>
+            <Navbar />
+            {children}
+          </SplashScreen>
+        </ThemeProvider>
       </body>
     </html>
   );

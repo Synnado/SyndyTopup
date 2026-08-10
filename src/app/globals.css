@@ -1,22 +1,54 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
+  /* Light mode: ม่วงอ่อน + ขาว */
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #1e1b2e;
+
+  --navbar-bg: #ede9fe;
+  --navbar-border: #ddd6fe;
+  --surface: #ffffff;
+
+  --accent: #8b5cf6;
+  --accent-strong: #6d28d9;
+  --accent-soft: #f5f3ff;
+
+  --muted: #6b7280;
+}
+
+.dark {
+  /* Dark mode: ม่วงเข้ม(เกือบดำ) + แดง + เทา */
+  --background: #0d0b12;
+  --foreground: #e5e5e5;
+
+  --navbar-bg: #15121c;
+  --navbar-border: #322c3d;
+  --surface: #1c1720;
+
+  --accent: #ef4444;
+  --accent-strong: #b91c1c;
+  --accent-soft: #241419;
+
+  --muted: #9ca3af;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-navbar-bg: var(--navbar-bg);
+  --color-navbar-border: var(--navbar-border);
+  --color-surface: var(--surface);
+
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-soft: var(--accent-soft);
+
+  --color-muted: var(--muted);
+
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
 }
 
 body {

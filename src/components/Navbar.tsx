@@ -1,0 +1,132 @@
+"use client";
+
+import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { Search, Moon, Sun, User, Coins, Menu, X } from "lucide-react";
+import { useTheme } from "@/context/ThemeContext";
+
+// เมนูหลักของ navbar — แก้ path/ชื่อได้ตรงนี้ที่เดียว
+const NAV_LINKS = [
+  { label: "หน้าแรก", href: "/" },
+  { label: "บริการทั้งหมด", href: "/services" },
+  { label: "เติมเงิน", href: "/topup" },
+];
+
+export default function Navbar() {
+  const { theme, toggleTheme } = useTheme();
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  // TODO: ค่ายอดเงินตอนนี้เป็นค่าตายตัวไปก่อน รอบต่อไปจะต่อกับระบบ Wallet จริง
+  const coinBalance = 0;
+
+  return (
+    <nav className="sticky top-0 z-40 border-b border-navbar-border bg-navbar-bg">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-4">
+        {/* โลโก้ + ชื่อร้าน */}
+        <Link href="/" className="flex shrink-0 items-center gap-2">
+          <div className="relative h-10 w-10 overflow-hidden rounded-full ring-2 ring-accent/40">
+            <Image
+              src="/mascot-logo.jpg"
+              alt="SyndyTopup"
+              fill
+              className="object-cover"
+              unoptimized
+            />
+          </div>
+          <span className="hidden text-lg font-bold text-foreground sm:block">
+            SyndyTopup
+          </span>
+        </Link>
+
+        {/* เมนูหลัก — โชว์เฉพาะจอ md ขึ้นไป */}
+        <div className="hidden items-center gap-3 md:flex">
+          {NAV_LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="rounded-full border-2 border-accent px-3 py-1 text-sm font-medium text-accent transition-colors hover:bg-accent hover:text-white"
+            >
+              {link.label}
+            </Link>
+          ))}
+        </div>
+
+        {/* ช่องค้นหา — โชว์เฉพาะจอ md ขึ้นไป */}
+        <div className="hidden max-w-xs flex-1 md:flex">
+          <div className="flex w-full items-center gap-2 rounded-full border-2 border-accent bg-surface px-4 py-2">
+            <Search size={16} className="shrink-0 text-muted" />
+            <input
+              type="text"
+              placeholder="ค้นหาสินค้า"
+              className="w-full bg-transparent text-sm text-foreground placeholder:text-muted focus:outline-none"
+            />
+          </div>
+        </div>
+
+        {/* ฝั่งขวา: dark mode, ยอดเงิน, โปรไฟล์ */}
+        <div className="flex shrink-0 items-center gap-2 sm:gap-3">
+          {/* ปุ่มสลับ Dark/Light mode */}
+          <button
+            onClick={toggleTheme}
+            aria-label="สลับโหมดมืด/สว่าง"
+            className="rounded-full p-2 text-accent ring-2 ring-accent transition-colors hover:bg-accent hover:text-white"
+          >
+            {theme === "light" ? <Moon size={18} /> : <Sun size={18} />}
+          </button>
+
+          {/* ยอดเงินคงเหลือ */}
+          <Link
+            href="/topup"
+            className="flex items-center gap-1.5 rounded-full bg-accent-soft px-3 py-1.5 text-sm font-semibold text-accent ring-2 ring-accent transition-colors hover:bg-accent hover:text-white"
+          >
+            <Coins size={16} />
+            {coinBalance.toLocaleString()} บาท
+          </Link>
+
+          {/* โปรไฟล์ผู้ใช้ */}
+          <Link
+            href="/profile"
+            aria-label="โปรไฟล์ผู้ใช้"
+            className="flex h-9 w-9 items-center justify-center rounded-full bg-accent-soft text-accent ring-2 ring-accent transition-colors hover:bg-accent hover:text-white"
+          >
+            <User size={18} />
+          </Link>
+
+          {/* ปุ่มเมนูมือถือ (hamburger) — โชว์เฉพาะจอเล็ก */}
+          <button
+            onClick={() => setIsMobileMenuOpen((prev) => !prev)}
+            aria-label="เปิด/ปิดเมนู"
+            className="rounded-full p-2 text-foreground/70 hover:bg-accent-soft md:hidden"
+          >
+            {isMobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+        </div>
+      </div>
+
+      {/* เมนูมือถือ — โชว์เมื่อกด hamburger */}
+      {isMobileMenuOpen && (
+        <div className="flex flex-col gap-1 border-t border-navbar-border px-4 py-3 md:hidden">
+          {NAV_LINKS.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              onClick={() => setIsMobileMenuOpen(false)}
+              className="rounded-lg border-2 border-accent px-3 py-2 text-sm font-medium text-accent hover:bg-accent hover:text-white"
+            >
+              {link.label}
+            </Link>
+          ))}
+          <div className="mt-1 flex items-center gap-2 rounded-full border-2 border-accent bg-surface px-4 py-2">
+            <Search size={16} className="shrink-0 text-muted" />
+            <input
+              type="text"
+              placeholder="ค้นหาสินค้า"
+              className="w-full bg-transparent text-sm text-foreground placeholder:text-muted focus:outline-none"
+            />
+          </div>
+        </div>
+      )}
+    </nav>
+  );
+}
