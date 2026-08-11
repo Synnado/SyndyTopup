@@ -2,6 +2,7 @@ import HeroCarousel from "@/components/HeroCarousel";
 import StatsBar from "@/components/StatsBar";
 import ActivityFeed from "@/components/ActivityFeed";
 import FlashSale from "@/components/FlashSale";
+import NewArrivals from "@/components/NewArrivals";
 
 export default function Home() {
   return (
@@ -24,6 +25,7 @@ export default function Home() {
       </section>
 
       <FlashSale />
+      <NewArrivals />
     </main>
   );
 }
