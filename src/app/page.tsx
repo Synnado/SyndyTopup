@@ -1,6 +1,7 @@
 import HeroCarousel from "@/components/HeroCarousel";
 import StatsBar from "@/components/StatsBar";
 import ActivityFeed from "@/components/ActivityFeed";
+import FlashSale from "@/components/FlashSale";
 
 export default function Home() {
   return (
@@ -21,6 +22,8 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      <FlashSale />
     </main>
   );
 }
