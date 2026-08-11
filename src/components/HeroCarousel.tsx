@@ -69,7 +69,7 @@ export default function HeroCarousel() {
   }, [emblaApi, onSelect]);
 
   return (
-    <div className="relative mx-auto w-full max-w-7xl px-4 py-8 sm:px-6">
+    <div className="relative mx-auto w-full max-w-7xl px-4 pt-6 pb-8 sm:px-6">
       {/* กรอบสไลด์ */}
       <div
         className="overflow-hidden rounded-3xl border-2 border-accent"
