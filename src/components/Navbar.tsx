@@ -14,6 +14,9 @@ import {
   LogIn,
   UserPlus,
   LogOut,
+  Settings,
+  Receipt,
+  ShoppingBag,
 } from "lucide-react";
 import { useTheme } from "@/context/ThemeContext";
 import { useAuth } from "@/context/AuthContext";
@@ -106,13 +109,10 @@ export default function Navbar() {
           </button>
 
           {/* ยอดเงินคงเหลือ */}
-          <Link
-            href="/topup"
-            className="flex items-center gap-1.5 rounded-full bg-accent-soft px-3 py-1.5 text-sm font-semibold text-accent ring-2 ring-accent transition-colors hover:bg-accent hover:text-white"
-          >
+          <div className="flex items-center gap-1.5 rounded-full bg-accent-soft px-3 py-1.5 text-sm font-semibold text-accent ring-2 ring-accent">
             <Coins size={16} />
             {coinBalance.toLocaleString()} บาท
-          </Link>
+          </div>
 
           {/* โปรไฟล์ผู้ใช้ — กดแล้วเปิดดรอปดาวน์ */}
           <div className="relative" ref={profileRef}>
@@ -130,11 +130,45 @@ export default function Navbar() {
                   <>
                     <div className="px-4 py-3">
                       <p className="truncate text-sm font-semibold text-foreground">
-                        สวัสดี, {user.username}
+                        {user.username}
                       </p>
                       <p className="truncate text-xs text-muted">
                         {user.email}
                       </p>
+                    </div>
+                    <div className="border-t border-navbar-border py-1">
+                      <Link
+                        href="/profile"
+                        onClick={() => setIsProfileOpen(false)}
+                        className="flex items-center gap-2 px-4 py-2 text-sm text-foreground transition-colors hover:bg-accent-soft hover:text-accent"
+                      >
+                        <User size={16} />
+                        โปรไฟล์
+                      </Link>
+                      <Link
+                        href="/settings"
+                        onClick={() => setIsProfileOpen(false)}
+                        className="flex items-center gap-2 px-4 py-2 text-sm text-foreground transition-colors hover:bg-accent-soft hover:text-accent"
+                      >
+                        <Settings size={16} />
+                        การตั้งค่าผู้ใช้
+                      </Link>
+                      <Link
+                        href="/history/topup"
+                        onClick={() => setIsProfileOpen(false)}
+                        className="flex items-center gap-2 px-4 py-2 text-sm text-foreground transition-colors hover:bg-accent-soft hover:text-accent"
+                      >
+                        <Receipt size={16} />
+                        ประวัติเติมเงิน
+                      </Link>
+                      <Link
+                        href="/history/purchases"
+                        onClick={() => setIsProfileOpen(false)}
+                        className="flex items-center gap-2 px-4 py-2 text-sm text-foreground transition-colors hover:bg-accent-soft hover:text-accent"
+                      >
+                        <ShoppingBag size={16} />
+                        ประวัติการซื้อสินค้า
+                      </Link>
                     </div>
                     <button
                       onClick={() => {
