@@ -5,6 +5,7 @@ import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import { ThemeProvider } from "@/context/ThemeContext";
+import { AuthProvider } from "@/context/AuthContext";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -31,11 +32,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-full flex flex-col">
         <AnimatedBackground />
         <ThemeProvider>
-          <SplashScreen duration={2500}>
-            <Navbar />
-            {children}
-            <Footer />
-          </SplashScreen>
+          <AuthProvider>
+            <SplashScreen duration={2500}>
+              <Navbar />
+              {children}
+              <Footer />
+            </SplashScreen>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

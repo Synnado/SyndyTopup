@@ -1,10 +1,22 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Search, Moon, Sun, User, Coins, Menu, X } from "lucide-react";
+import {
+  Search,
+  Moon,
+  Sun,
+  User,
+  Coins,
+  Menu,
+  X,
+  LogIn,
+  UserPlus,
+  LogOut,
+} from "lucide-react";
 import { useTheme } from "@/context/ThemeContext";
+import { useAuth } from "@/context/AuthContext";
 import SearchModal from "@/components/SearchModal";
 
 // เมนูหลักของ navbar — แก้ path/ชื่อได้ตรงนี้ที่เดียว
@@ -16,11 +28,28 @@ const NAV_LINKS = [
 
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
+  const { user, logout } = useAuth();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const profileRef = useRef<HTMLDivElement>(null);
 
   // TODO: ค่ายอดเงินตอนนี้เป็นค่าตายตัวไปก่อน รอบต่อไปจะต่อกับระบบ Wallet จริง
   const coinBalance = 0;
+
+  // ปิดดรอปดาวน์โปรไฟล์เมื่อคลิกนอกกรอบ
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (
+        profileRef.current &&
+        !profileRef.current.contains(e.target as Node)
+      ) {
+        setIsProfileOpen(false);
+      }
+    }
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   return (
     <nav className="sticky top-0 z-40 border-b border-navbar-border bg-navbar-bg">
@@ -85,14 +114,62 @@ export default function Navbar() {
             {coinBalance.toLocaleString()} บาท
           </Link>
 
-          {/* โปรไฟล์ผู้ใช้ */}
-          <Link
-            href="/profile"
-            aria-label="โปรไฟล์ผู้ใช้"
-            className="flex h-9 w-9 items-center justify-center rounded-full bg-accent-soft text-accent ring-2 ring-accent transition-colors hover:bg-accent hover:text-white"
-          >
-            <User size={18} />
-          </Link>
+          {/* โปรไฟล์ผู้ใช้ — กดแล้วเปิดดรอปดาวน์ */}
+          <div className="relative" ref={profileRef}>
+            <button
+              onClick={() => setIsProfileOpen((prev) => !prev)}
+              aria-label="เมนูผู้ใช้"
+              className="flex h-9 w-9 items-center justify-center rounded-full bg-accent-soft text-sm font-bold text-accent ring-2 ring-accent transition-colors hover:bg-accent hover:text-white"
+            >
+              {user ? user.username.charAt(0).toUpperCase() : <User size={18} />}
+            </button>
+
+            {isProfileOpen && (
+              <div className="absolute right-0 top-full z-50 mt-2 w-56 overflow-hidden rounded-xl border-2 border-accent bg-surface shadow-xl">
+                {user ? (
+                  <>
+                    <div className="px-4 py-3">
+                      <p className="truncate text-sm font-semibold text-foreground">
+                        สวัสดี, {user.username}
+                      </p>
+                      <p className="truncate text-xs text-muted">
+                        {user.email}
+                      </p>
+                    </div>
+                    <button
+                      onClick={() => {
+                        logout();
+                        setIsProfileOpen(false);
+                      }}
+                      className="flex w-full items-center gap-2 border-t border-navbar-border px-4 py-2.5 text-left text-sm text-foreground transition-colors hover:bg-accent-soft hover:text-accent"
+                    >
+                      <LogOut size={16} />
+                      ออกจากระบบ
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      href="/login"
+                      onClick={() => setIsProfileOpen(false)}
+                      className="flex items-center gap-2 px-4 py-2.5 text-sm text-foreground transition-colors hover:bg-accent-soft hover:text-accent"
+                    >
+                      <LogIn size={16} />
+                      เข้าสู่ระบบ
+                    </Link>
+                    <Link
+                      href="/register"
+                      onClick={() => setIsProfileOpen(false)}
+                      className="flex items-center gap-2 border-t border-navbar-border px-4 py-2.5 text-sm text-foreground transition-colors hover:bg-accent-soft hover:text-accent"
+                    >
+                      <UserPlus size={16} />
+                      สมัครสมาชิก
+                    </Link>
+                  </>
+                )}
+              </div>
+            )}
+          </div>
 
           {/* ปุ่มเมนูมือถือ (hamburger) — โชว์เฉพาะจอเล็ก */}
           <button
