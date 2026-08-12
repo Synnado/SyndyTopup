@@ -14,7 +14,6 @@ import {
   LogIn,
   UserPlus,
   LogOut,
-  Settings,
   Receipt,
   ShoppingBag,
 } from "lucide-react";
@@ -157,14 +156,6 @@ export default function Navbar() {
                       >
                         <User size={16} />
                         โปรไฟล์
-                      </Link>
-                      <Link
-                        href="/settings"
-                        onClick={() => setIsProfileOpen(false)}
-                        className="flex items-center gap-2 px-4 py-2 text-sm text-foreground transition-colors hover:bg-accent-soft hover:text-accent"
-                      >
-                        <Settings size={16} />
-                        การตั้งค่าผู้ใช้
                       </Link>
                       <Link
                         href="/history/topup"
