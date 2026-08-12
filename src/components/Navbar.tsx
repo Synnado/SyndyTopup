@@ -119,9 +119,22 @@ export default function Navbar() {
             <button
               onClick={() => setIsProfileOpen((prev) => !prev)}
               aria-label="เมนูผู้ใช้"
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-accent-soft text-sm font-bold text-accent ring-2 ring-accent transition-colors hover:bg-accent hover:text-white"
+              className="flex h-9 w-9 items-center justify-center overflow-hidden rounded-full bg-accent-soft text-sm font-bold text-accent ring-2 ring-accent transition-colors hover:bg-accent hover:text-white"
             >
-              {user ? user.username.charAt(0).toUpperCase() : <User size={18} />}
+              {user ? (
+                user.avatarUrl ? (
+                  // eslint-disable-next-line @next/next/no-img-element -- data URL จาก localStorage ใช้ next/image ไม่ได้ตรงๆ
+                  <img
+                    src={user.avatarUrl}
+                    alt={user.username}
+                    className="h-full w-full object-cover"
+                  />
+                ) : (
+                  user.username.charAt(0).toUpperCase()
+                )
+              ) : (
+                <User size={18} />
+              )}
             </button>
 
             {isProfileOpen && (
