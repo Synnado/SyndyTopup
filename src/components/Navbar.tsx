@@ -14,11 +14,13 @@ import {
   LogIn,
   UserPlus,
   LogOut,
+  Settings,
   Receipt,
   ShoppingBag,
 } from "lucide-react";
 import { useTheme } from "@/context/ThemeContext";
 import { useAuth } from "@/context/AuthContext";
+import { useWallet } from "@/context/WalletContext";
 import SearchModal from "@/components/SearchModal";
 
 // เมนูหลักของ navbar — แก้ path/ชื่อได้ตรงนี้ที่เดียว
@@ -31,13 +33,11 @@ const NAV_LINKS = [
 export default function Navbar() {
   const { theme, toggleTheme } = useTheme();
   const { user, logout } = useAuth();
+  const { balance } = useWallet();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const profileRef = useRef<HTMLDivElement>(null);
-
-  // TODO: ค่ายอดเงินตอนนี้เป็นค่าตายตัวไปก่อน รอบต่อไปจะต่อกับระบบ Wallet จริง
-  const coinBalance = 0;
 
   // ปิดดรอปดาวน์โปรไฟล์เมื่อคลิกนอกกรอบ
   useEffect(() => {
@@ -110,7 +110,7 @@ export default function Navbar() {
           {/* ยอดเงินคงเหลือ */}
           <div className="flex items-center gap-1.5 rounded-full bg-accent-soft px-3 py-1.5 text-sm font-semibold text-accent ring-2 ring-accent">
             <Coins size={16} />
-            {coinBalance.toLocaleString()} บาท
+            {balance.toLocaleString()} บาท
           </div>
 
           {/* โปรไฟล์ผู้ใช้ — กดแล้วเปิดดรอปดาวน์ */}
@@ -156,6 +156,14 @@ export default function Navbar() {
                       >
                         <User size={16} />
                         โปรไฟล์
+                      </Link>
+                      <Link
+                        href="/settings"
+                        onClick={() => setIsProfileOpen(false)}
+                        className="flex items-center gap-2 px-4 py-2 text-sm text-foreground transition-colors hover:bg-accent-soft hover:text-accent"
+                      >
+                        <Settings size={16} />
+                        การตั้งค่าผู้ใช้
                       </Link>
                       <Link
                         href="/history/topup"

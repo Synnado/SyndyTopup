@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { AuthProvider } from "@/context/AuthContext";
+import { WalletProvider } from "@/context/WalletContext";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -33,11 +34,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <AnimatedBackground />
         <ThemeProvider>
           <AuthProvider>
-            <SplashScreen duration={2500}>
-              <Navbar />
-              {children}
-              <Footer />
-            </SplashScreen>
+            <WalletProvider>
+              <SplashScreen duration={2500}>
+                <Navbar />
+                {children}
+                <Footer />
+              </SplashScreen>
+            </WalletProvider>
           </AuthProvider>
         </ThemeProvider>
       </body>

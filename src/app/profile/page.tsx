@@ -14,10 +14,12 @@ import {
   Camera,
 } from "lucide-react";
 import { useAuth } from "@/context/AuthContext";
+import { useWallet } from "@/context/WalletContext";
 import FormInput from "@/components/FormInput";
 
 export default function ProfilePage() {
   const { user, isLoading, updateProfile } = useAuth();
+  const { balance } = useWallet();
   const router = useRouter();
 
   const [isEditing, setIsEditing] = useState(false);
@@ -101,8 +103,7 @@ export default function ProfilePage() {
     setResetEmail(user!.email);
   }
 
-  // TODO: ยอดเงินตอนนี้เป็นค่าตายตัวไปก่อน รอต่อกับระบบ Wallet จริง
-  const coinBalance = 0;
+  // TODO: ยอดเงินตอนนี้ดึงจาก WalletContext (mock เก็บใน localStorage) รอต่อกับระบบ Wallet จริงทีหลัง
 
   const joinedDate = new Date(user.joinedAt);
   const formattedJoinedDate = joinedDate.toLocaleDateString("th-TH", {
@@ -209,7 +210,7 @@ export default function ProfilePage() {
             <div className="min-w-0">
               <p className="text-xs text-muted">ยอดเงินคงเหลือ</p>
               <p className="text-sm font-medium text-foreground">
-                {coinBalance.toLocaleString()} บาท
+                {balance.toLocaleString()} บาท
               </p>
             </div>
           </div>
