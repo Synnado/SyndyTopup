@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { QrCode, CheckCircle2, X } from "lucide-react";
 import { useWallet } from "@/context/WalletContext";
 
@@ -18,6 +19,7 @@ export default function TopupConfirmModal({
   methodLabel,
 }: TopupConfirmModalProps) {
   const { addFunds } = useWallet();
+  const router = useRouter();
   const [shouldRender, setShouldRender] = useState(false);
   const [isDone, setIsDone] = useState(false);
 
@@ -41,6 +43,11 @@ export default function TopupConfirmModal({
     // TODO: ตอนนี้เป็นระบบจำลอง (mock) — ยังไม่เชื่อมช่องทางชำระเงินจริง
     addFunds(amount);
     setIsDone(true);
+  }
+
+  function handleFinish() {
+    onClose();
+    router.push("/");
   }
 
   return (
@@ -83,7 +90,7 @@ export default function TopupConfirmModal({
                 เติมเงินเข้าบัญชีเรียบร้อยแล้ว
               </p>
               <button
-                onClick={onClose}
+                onClick={handleFinish}
                 className="mt-2 w-full rounded-xl bg-accent py-2.5 text-sm font-semibold text-white transition-colors hover:bg-accent-strong"
               >
                 เสร็จสิ้น
