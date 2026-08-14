@@ -4,12 +4,13 @@ import { use, useState } from "react";
 import { notFound, useRouter } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { Home, ChevronRight, Package } from "lucide-react";
+import { Package } from "lucide-react";
 import { getProductById } from "@/lib/products";
 import { CATEGORIES } from "@/lib/categories";
 import { useAuth } from "@/context/AuthContext";
 import { useWallet } from "@/context/WalletContext";
 import PurchaseConfirmModal from "@/components/PurchaseConfirmModal";
+import BackButton from "@/components/BackButton";
 
 interface ProductPageProps {
   params: Promise<{ id: string }>;
@@ -47,35 +48,7 @@ export default function ProductPage({ params }: ProductPageProps) {
 
   return (
     <main className="mx-auto w-full max-w-5xl flex-1 px-4 py-10 sm:px-6">
-      {/* Breadcrumb */}
-      <nav className="mb-6 flex flex-wrap items-center gap-1.5 text-sm text-muted">
-        <Link
-          href="/"
-          className="flex items-center gap-1 transition-colors hover:text-accent"
-        >
-          <Home size={14} />
-          หน้าแรก
-        </Link>
-        <ChevronRight size={14} />
-        <Link href="/services" className="transition-colors hover:text-accent">
-          บริการทั้งหมด
-        </Link>
-        {category && (
-          <>
-            <ChevronRight size={14} />
-            <Link
-              href={`/services/${category.id}`}
-              className="transition-colors hover:text-accent"
-            >
-              {category.label}
-            </Link>
-          </>
-        )}
-        <ChevronRight size={14} />
-        <span className="truncate font-medium text-foreground">
-          {product.title}
-        </span>
-      </nav>
+      <BackButton />
 
       <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
         {/* รูปสินค้า */}

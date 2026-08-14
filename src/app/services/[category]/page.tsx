@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { CATEGORIES } from "@/lib/categories";
 import { PRODUCTS_BY_CATEGORY } from "@/lib/products";
 import ProductCard from "@/components/ProductCard";
+import BackButton from "@/components/BackButton";
 
 interface CategoryPageProps {
   params: Promise<{ category: string }>;
@@ -21,6 +22,8 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   return (
     <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-10 sm:px-6">
+      <BackButton />
+
       {/* แบนเนอร์ใหญ่ */}
       <div className="relative flex h-48 items-center justify-center gap-4 overflow-hidden rounded-2xl border-2 border-accent bg-gradient-to-br from-accent to-accent-strong sm:h-64">
         <Icon size={56} className="shrink-0 text-white/90 sm:h-16 sm:w-16" />
