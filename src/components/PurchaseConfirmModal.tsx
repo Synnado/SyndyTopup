@@ -1,0 +1,115 @@
+"use client";
+
+import { useEffect, useState } from "react";
+import { CheckCircle2, X, ShoppingBag } from "lucide-react";
+import { useWallet } from "@/context/WalletContext";
+
+interface PurchaseConfirmModalProps {
+  open: boolean;
+  onClose: () => void;
+  title: string;
+  price: number;
+}
+
+export default function PurchaseConfirmModal({
+  open,
+  onClose,
+  title,
+  price,
+}: PurchaseConfirmModalProps) {
+  const { addFunds } = useWallet();
+  const [shouldRender, setShouldRender] = useState(false);
+  const [isDone, setIsDone] = useState(false);
+
+  useEffect(() => {
+    if (open) {
+      setShouldRender(true);
+      document.body.style.overflow = "hidden";
+      return;
+    }
+    const timer = setTimeout(() => {
+      setShouldRender(false);
+      setIsDone(false);
+    }, 200);
+    document.body.style.overflow = "";
+    return () => clearTimeout(timer);
+  }, [open]);
+
+  if (!shouldRender) return null;
+
+  function handleConfirm() {
+    // TODO: ตอนนี้เป็นระบบจำลอง (mock) — ยังไม่ได้ตัดสต๊อกสินค้าจริงหรือส่งของให้ผู้ใช้จริง
+    // addFunds รับค่าติดลบได้ ใช้แทนการ "หักเงิน" ไปเลย
+    addFunds(-price);
+    setIsDone(true);
+  }
+
+  return (
+    <div className="fixed inset-0 z-50 flex items-center justify-center px-4">
+      <div
+        onClick={onClose}
+        className={`fixed inset-0 bg-black/60 backdrop-blur-sm transition-opacity duration-200 ${
+          open ? "opacity-100" : "opacity-0"
+        }`}
+      />
+
+      <div
+        className={`relative z-10 w-full max-w-sm overflow-hidden rounded-2xl border-2 border-accent bg-surface shadow-2xl transition-all duration-200 ${
+          open ? "translate-y-0 opacity-100" : "-translate-y-4 opacity-0"
+        }`}
+      >
+        <div className="flex items-center justify-between border-b border-navbar-border px-5 py-4">
+          <h2 className="text-base font-bold text-foreground">
+            {isDone ? "ซื้อสินค้าสำเร็จ" : "ยืนยันการสั่งซื้อ"}
+          </h2>
+          <button
+            onClick={onClose}
+            aria-label="ปิด"
+            className="rounded-full p-1 text-muted transition-colors hover:bg-accent-soft hover:text-accent"
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        <div className="flex flex-col items-center gap-3 px-5 py-6 text-center">
+          {isDone ? (
+            <>
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-accent-soft text-accent">
+                <CheckCircle2 size={28} />
+              </div>
+              <p className="font-semibold text-foreground">{title}</p>
+              <p className="text-sm text-muted">
+                ซื้อสำเร็จแล้ว ระบบหักเงินเรียบร้อย
+              </p>
+              <button
+                onClick={onClose}
+                className="mt-2 w-full rounded-xl bg-accent py-2.5 text-sm font-semibold text-white transition-colors hover:bg-accent-strong"
+              >
+                เสร็จสิ้น
+              </button>
+            </>
+          ) : (
+            <>
+              <div className="flex h-14 w-14 items-center justify-center rounded-full bg-accent-soft text-accent">
+                <ShoppingBag size={26} />
+              </div>
+              <p className="font-semibold text-foreground">{title}</p>
+              <p className="text-2xl font-bold text-accent">
+                ฿{price.toLocaleString()}
+              </p>
+              <p className="text-xs text-muted">
+                (ตอนนี้เป็นระบบจำลอง — ยังไม่ตัดสต๊อกสินค้าจริง)
+              </p>
+              <button
+                onClick={handleConfirm}
+                className="mt-2 w-full rounded-xl bg-accent py-2.5 text-sm font-semibold text-white transition-colors hover:bg-accent-strong"
+              >
+                ยืนยันการสั่งซื้อ
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+    </div>
+  );
+}
